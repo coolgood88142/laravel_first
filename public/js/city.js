@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -103,24 +103,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    selectClass: {
-      type: String
-    },
     countiesData: {
       type: Array
-    },
-    countiesSelected: {
-      type: Number
     }
   },
   data: function data() {
     return {
       countiesArray: this.countiesData,
-      countiesValue: this.countiesSelected
+      countiesValue: ''
     };
+  },
+  methods: {
+    changeCounties: function changeCounties() {
+      if (this.countiesValue != '') {
+        this.$emit('change-counties', this.countiesArray[this.countiesValue]['text'], this.countiesValue);
+      }
+    }
   }
 });
 
@@ -147,9 +147,6 @@ __webpack_require__.r(__webpack_exports__);
     countiesSelectedText: {
       type: String
     },
-    selectClass: {
-      type: String
-    },
     districtsData: {
       type: Object
     },
@@ -158,7 +155,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
-    districts_array: function districts_array() {
+    districtsArray: function districtsArray() {
       if (this.countiesSelectedText != '') {
         return this.districtsData[this.countiesSelectedText];
       }
@@ -167,13 +164,22 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       districts: [],
-      districtsValue: this.districtsSelected,
-      districtsText: ''
+      districtsValue: this.districtsSelected
     };
   },
   watch: {
     districtsValue: function districtsValue(newVal) {
-      this.districtsText = this.districts_array[newVal];
+      var districtsText = '';
+
+      _.findKey(this.districtsArray, function (e, key) {
+        if (e.value === newVal) {
+          districtsText = e.text;
+        }
+      });
+
+      if (districtsText != '') {
+        this.$emit('change-districts', districtsText, newVal);
+      }
     }
   }
 });
@@ -851,7 +857,6 @@ var render = function() {
           expression: "countiesValue"
         }
       ],
-      class: _vm.selectClass,
       attrs: { id: "us_counties", name: "us_counties" },
       on: {
         change: [
@@ -869,13 +874,13 @@ var render = function() {
               : $$selectedVal[0]
           },
           function($event) {
-            return _vm.$emit("change-counties", _vm.countiesValue)
+            return _vm.changeCounties()
           }
         ]
       }
     },
     [
-      _c("option", { attrs: { value: "0", disabled: "", selected: "" } }, [
+      _c("option", { attrs: { value: "", disabled: "", selected: "" } }, [
         _vm._v("--請選擇--")
       ]),
       _vm._v(" "),
@@ -923,27 +928,21 @@ var render = function() {
           expression: "districtsValue"
         }
       ],
-      class: _vm.selectClass,
       attrs: { id: "us_districts", name: "us_districts" },
       on: {
-        change: [
-          function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.districtsValue = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          },
-          function($event) {
-            return _vm.$emit("change-districts", _vm.districtsValue)
-          }
-        ]
+        change: function($event) {
+          var $$selectedVal = Array.prototype.filter
+            .call($event.target.options, function(o) {
+              return o.selected
+            })
+            .map(function(o) {
+              var val = "_value" in o ? o._value : o.value
+              return val
+            })
+          _vm.districtsValue = $event.target.multiple
+            ? $$selectedVal
+            : $$selectedVal[0]
+        }
       }
     },
     [
@@ -951,7 +950,7 @@ var render = function() {
         _vm._v("--請選擇--")
       ]),
       _vm._v(" "),
-      _vm._l(_vm.districts_array, function(districts, index) {
+      _vm._l(_vm.districtsArray, function(districts, index) {
         return _c(
           "option",
           { key: index, domProps: { value: districts.value } },
@@ -1102,51 +1101,31 @@ var app = new Vue({
   data: {
     message: 'Vue練習:',
     showText: '顯示郵遞區號!',
-    countiesSelected: NaN,
-    districtsSelected: '',
-    btnStyle: 'btn btn-primary',
-    cityStyle: {
-      countiesError: false,
-      districtsError: false,
-      errorColor: 'text-danger',
-      textStyle: 'text-black font-weight-bold'
-    }
+    countiesSelected: 0,
+    districtsSelected: 0,
+    countiesSelectedText: '',
+    districtsSelectedText: '',
+    btnStyle: 'btn btn-primary'
   },
   components: {
     'counties': _components_counties_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     'districts': _components_districts_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   methods: {
-    getDistrictsSelected: function getDistrictsSelected(DistrictsSelected) {
+    getDistrictsData: function getDistrictsData(DistrictsSelectedText, DistrictsSelected) {
+      this.districtsSelectedText = DistrictsSelectedText;
       this.districtsSelected = DistrictsSelected;
     },
-    updateDistricts: function updateDistricts(CountiesSelected) {
+    updateDistricts: function updateDistricts(CountiesSelectedText, CountiesSelected) {
+      this.countiesSelectedText = CountiesSelectedText;
       this.countiesSelected = CountiesSelected;
+      this.districtsSelected = 0;
     },
     showPostalCode: function showPostalCode() {
-      var counties = document.getElementById("counties");
-      var districts = document.getElementById("districts");
-      var counties_val = counties.options[counties.selectedIndex].value;
-      var districts_val = districts.options[districts.selectedIndex].value;
       var show_text = '';
 
-      if (counties_val == '') {
-        this.countiesError = true;
-      } else {
-        this.countiesError = false;
-      }
-
-      if (districts_val == '') {
-        this.districtsError = true;
-      } else {
-        this.districtsError = false;
-      }
-
-      if (counties_val != '' && districts_val != '') {
-        var counties_text = counties.options[counties.selectedIndex].text;
-        var districts_text = districts.options[districts.selectedIndex].text;
-        var num = this.districtsSelected;
-        show_text = counties_text + " " + districts_text + " 郵遞區號為：" + num;
+      if (this.countiesSelected != 0 && this.districtsSelected != 0) {
+        show_text = this.countiesSelectedText + " " + this.districtsSelectedText + " 郵遞區號為：" + this.districtsSelected;
         alert(show_text);
       }
     }
@@ -1293,7 +1272,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /*!************************************!*\
   !*** multi ./resources/js/city.js ***!
   \************************************/

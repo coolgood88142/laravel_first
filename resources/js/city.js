@@ -1,60 +1,37 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import counties from './components/counties.vue';
-import districts from './components/districts.vue';
+import cityCounties from './components/CityCounties.vue';
+import cityDistricts from './components/CityDistricts.vue';
 
 let app = new Vue({
     el: '#app',
     data: {
         message: 'Vue練習:',
         showText: '顯示郵遞區號!',
-        countiesSelected: NaN,
-        districtsSelected: '',
-        btnStyle: 'btn btn-primary',
-        cityStyle: {
-            countiesError: false,
-            districtsError: false,
-            errorColor: 'text-danger',
-            textStyle: 'text-black font-weight-bold'
-        }
+        countiesSelected: 0,
+        districtsSelected: 0,
+        countiesSelectedText: '',
+        districtsSelectedText: '',
+        btnStyle: 'btn btn-primary'
     },
     components: {
-        'counties': counties,
-        'districts': districts
+        'city-counties': cityCounties,
+        'city-districts': cityDistricts
     },
     methods: {
-        getDistrictsSelected(DistrictsSelected) {
-            this.districtsSelected = DistrictsSelected;
+        getDistrictsData (DistrictsSelectedText, DistrictsSelected) {
+            this.districtsSelectedText = DistrictsSelectedText
+            this.districtsSelected = DistrictsSelected
         },
-        updateDistricts(CountiesSelected) {
-            this.countiesSelected = CountiesSelected;
+        updateDistricts (CountiesSelectedText, CountiesSelected) {
+            this.countiesSelectedText = CountiesSelectedText
+            this.countiesSelected = CountiesSelected
+            this.districtsSelected = 0
         },
         showPostalCode() {
-            let counties = document.getElementById("counties");
-            let districts = document.getElementById("districts");
-
-            let counties_val = counties.options[counties.selectedIndex].value;
-            let districts_val = districts.options[districts.selectedIndex].value;
-            let show_text = '';
-
-            if (counties_val == '') {
-                this.countiesError = true;
-            } else {
-                this.countiesError = false;
-            }
-
-            if (districts_val == '') {
-                this.districtsError = true;
-            } else {
-                this.districtsError = false;
-            }
-
-            if (counties_val != '' && districts_val != '') {
-                let counties_text = counties.options[counties.selectedIndex].text;
-                let districts_text = districts.options[districts.selectedIndex].text;
-                let num = this.districtsSelected;
-
-                show_text = counties_text + " " + districts_text + " 郵遞區號為：" + num;
-                alert(show_text);
+            let show_text = ''
+            if (this.countiesSelected != 0 && this.districtsSelected  != 0) {
+                show_text = this.countiesSelectedText + " " + this.districtsSelectedText + " 郵遞區號為：" + this.districtsSelected
+                alert(show_text)
             }
         }
     }
