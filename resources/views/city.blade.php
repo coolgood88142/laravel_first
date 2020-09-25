@@ -8,20 +8,23 @@
 			@{{ message }}
 			<city-counties 
 				@change-counties="updateDistricts" 
+				:counties-selected="countiesSelected"
 				:counties-data="{{ json_encode($counties) }}"
-			/>
+			>
+			</city-counties>
 			<city-districts 
 				@change-districts="getDistrictsData" 
 				:counties-selected-text="countiesSelectedText" 
 				:districts-selected="districtsSelected" 
-				:districts-data="{{ json_encode($districts) }}"
+				:districts-data="{{ json_encode($districts) }}" 
 			/>
+			</city-districts>
 			<input 
 				type="button" 
 				id="show" 
 				:class="btnStyle" 
 				:value="showText" 
-				@click="showPostalCode"
+				@click="showPostalCode" 
 			/>
 		</div>
 		<script src="{{mix('js/app.js')}}"></script>

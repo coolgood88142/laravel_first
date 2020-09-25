@@ -1,6 +1,6 @@
 <template>
 	<select v-model="districtsValue" id="us_districts" name="us_districts" >
-		<option value="0" disabled selected>--請選擇--</option>
+		<option value="NaN" disabled selected>--請選擇--</option>
 		<option v-for="(districts, index) in districtsArray" :key="index" :value="districts.value">{{ districts.text }}</option>
 	</select>
 </template>
@@ -21,6 +21,7 @@ export default {
 	computed: {
 		districtsArray() {
 			if (this.countiesSelectedText != '' ) {
+				this.districtsValue = this.districtsSelected
 				return this.districtsData[this.countiesSelectedText];
 			}
 		}

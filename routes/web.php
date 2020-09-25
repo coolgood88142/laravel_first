@@ -17,5 +17,9 @@ Route::get('/', function () {
     return view('hello');
 });
 
+Route::get('/fuzzySearch', function () {
+    return view('fuzzySearch');
+});
+
 Route::get('/city', 'CityController@getCityData');
 
