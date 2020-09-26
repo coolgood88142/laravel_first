@@ -1,11 +1,7 @@
 <template>
 	<div id="channel_list">
-		<div style="text-align:right;margin-bottom: 20px;">
-			<input type="button" id="add" :class="btnSelect" value="送出"
-				v-on:click="showSelectChannels()">
-		</div>
 		<div class="form-group">
-			<vSelect v-model="searchData" label="name" :options="toListData"
+			<vSelect v-model="searchData" label="name" :options="searchData"
 				:filterable="false" @search="onSearch">
 				<span slot="no-options"></span>
 			</vSelect>
@@ -18,9 +14,9 @@
 					<th>標題</th>
 					<th>已完成</th>
 				</tr>
-				<tr v-for="(data, index) in Search" :key="index">
+				<tr v-for="(data, index) in toListData" :key="index">
 					<th>{{ data.userId }}</th>
-					<th>{{ data.Id }}</th>
+					<th>{{ data.id }}</th>
 					<th>{{ data.title }}</th>
 					<th>{{ data.completed }}</th>
 				</tr>
@@ -39,32 +35,39 @@
 import "vue-select/dist/vue-select.css"
 import vSelect from "vue-select"
 Vue.component("vSelect", vSelect)
-let defaultLable = {"id": 0, "name": "---請選擇---"}
 
 export default {
 	data() {
 		return {
 			btnSelect: 'btn btn-primary',
-			searchData: '',
-			toListData: ''
+			searchData: [],
+			toListData: []
 		}
 	},
 	methods: {
 		onSearch(search, loading) {
-			loading(true)
-			this.search(loading, search, this)
+			if(search != ''){
+				loading(true)
+				this.search(loading, search, this)
+			}
 		},
-		search: _.debounce((loading, search) => {
-			 axios.get(`https://jsonplaceholder.typicode.com/todos/${search}`)
+		search: _.debounce((loading, search, vm) => {
+			 axios.get(`https://jsonplaceholder.typicode.com/todos?title=${search}`)
 			.then(
 				response => (
-				this.toListData = response.searchData
-			))
+				vm.searchData.length = 0,
+				vm.toListData.length = 0,
+				_.findKey(response.data, function(e, key) { 
+					vm.searchData.push(e.title)
+					vm.toListData.push(e)
+				}),
+				loading(false)
+				)
+			)
 			.catch(error => {
 				console.log(error)
 				this.errored = true
 			})
-			.finally(() => this.loading = false)
 		}, 350)
 	},
 }

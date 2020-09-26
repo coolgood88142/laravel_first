@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -134,38 +134,33 @@ var _this = undefined;
 //
 //
 //
-//
-//
-//
-//
 
 
 Vue.component("vSelect", vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
-var defaultLable = {
-  "id": 0,
-  "name": "---請選擇---"
-};
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       btnSelect: 'btn btn-primary',
-      searchData: '',
-      toListData: ''
+      searchData: [],
+      toListData: []
     };
   },
   methods: {
     onSearch: function onSearch(search, loading) {
-      loading(true);
-      this.search(loading, search, this);
+      if (search != '') {
+        loading(true);
+        this.search(loading, search, this);
+      }
     },
-    search: _.debounce(function (loading, search) {
-      axios.get("https://jsonplaceholder.typicode.com/todos/".concat(search)).then(function (response) {
-        return _this.toListData = response.searchData;
+    search: _.debounce(function (loading, search, vm) {
+      axios.get("https://jsonplaceholder.typicode.com/todos?title=".concat(search)).then(function (response) {
+        return vm.searchData.length = 0, vm.toListData.length = 0, _.findKey(response.data, function (e, key) {
+          vm.searchData.push(e.title);
+          vm.toListData.push(e);
+        }), loading(false);
       })["catch"](function (error) {
         console.log(error);
         _this.errored = true;
-      })["finally"](function () {
-        return _this.loading = false;
       });
     }, 350)
   }
@@ -904,22 +899,6 @@ var render = function() {
   return _c("div", { attrs: { id: "channel_list" } }, [
     _c(
       "div",
-      { staticStyle: { "text-align": "right", "margin-bottom": "20px" } },
-      [
-        _c("input", {
-          class: _vm.btnSelect,
-          attrs: { type: "button", id: "add", value: "送出" },
-          on: {
-            click: function($event) {
-              return _vm.showSelectChannels()
-            }
-          }
-        })
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
       { staticClass: "form-group" },
       [
         _c(
@@ -927,7 +906,7 @@ var render = function() {
           {
             attrs: {
               label: "name",
-              options: _vm.toListData,
+              options: _vm.searchData,
               filterable: false
             },
             on: { search: _vm.onSearch },
@@ -955,11 +934,11 @@ var render = function() {
         [
           _vm._m(0),
           _vm._v(" "),
-          _vm._l(_vm.Search, function(data, index) {
+          _vm._l(_vm.toListData, function(data, index) {
             return _c("tr", { key: index }, [
               _c("th", [_vm._v(_vm._s(data.userId))]),
               _vm._v(" "),
-              _c("th", [_vm._v(_vm._s(data.Id))]),
+              _c("th", [_vm._v(_vm._s(data.id))]),
               _vm._v(" "),
               _c("th", [_vm._v(_vm._s(data.title))]),
               _vm._v(" "),
@@ -1261,7 +1240,7 @@ var app = new Vue({
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!*******************************************!*\
   !*** multi ./resources/js/fuzzySearch.js ***!
   \*******************************************/
