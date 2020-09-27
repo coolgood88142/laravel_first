@@ -1,9 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css"
-import card from "./components/card.vue"
-import message from "./components/message.vue"
+import CardList from "./components/card/CardList.vue"
+import CardMessage from "./components/card/CardMessage.vue"
 
 let app = new Vue({
     el: "#app",
+    components: {
+        "card-list": CardList,
+        "card-message": CardMessage
+    },
     data: {
         title: "卡片狀態",
         items: [
@@ -12,21 +16,21 @@ let app = new Vue({
                 price: 1500,
                 card: "xyz111",
                 datetime: "2020-08-05 11:32:53",
-                status: 1,
+                status: "1",
             },
             {
                 name: "banana",
                 price: 1000,
                 card: "abc111",
                 datetime: "2020-08-05 11:45:15",
-                status: 0,
+                status: "0",
             },
             {
                 name: "orange",
                 price: 2000,
                 card: "opq111",
                 datetime: "2020-08-05 11:05:53",
-                status: 1,
+                status: "1",
             },
         ],
         cardItems: [
@@ -65,10 +69,6 @@ let app = new Vue({
         ],
         showErrorMessage: false,
         errorMessageText: "",
-    },
-    components: {
-        "card": card,
-        "message": message
     },
     computed: {
         cardData() {

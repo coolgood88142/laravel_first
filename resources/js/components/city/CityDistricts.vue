@@ -11,11 +11,19 @@ export default {
 		countiesSelectedText: {
 			type:String
 		},
+
 		districtsData: {
 			type:Object
 		},
+		
 		districtsSelected: {
 			type:Number
+		}
+	},
+	data() {
+		return {
+			districts: [],
+			districtsValue: this.districtsSelected,
 		}
 	},
 	computed: {
@@ -24,12 +32,6 @@ export default {
 				this.districtsValue = this.districtsSelected
 				return this.districtsData[this.countiesSelectedText];
 			}
-		}
-	},
-	data() {
-		return {
-			districts: [],
-			districtsValue: this.districtsSelected,
 		}
 	},
 	watch:{

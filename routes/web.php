@@ -21,8 +21,8 @@ Route::get('/card', function () {
     return view('card');
 });
 
-Route::get('/fuzzySearch', function () {
-    return view('fuzzySearch');
+Route::get('/search', function () {
+    return view('search');
 });
 
 Route::get('/city', 'CityController@getCityData');

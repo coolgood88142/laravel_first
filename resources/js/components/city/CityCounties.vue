@@ -24,7 +24,7 @@ export default {
 	},
 	methods:{
 		changeCounties() {
-			if (this.countiesValue != '') {
+			if (this.countiesValue != NaN) {
 				this.$emit('change-counties', this.countiesArray[this.countiesValue]['text'], this.countiesValue)
 			}
 		}

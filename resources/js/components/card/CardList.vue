@@ -1,51 +1,52 @@
 <template>
 	<div class="row" style="margin-bottom: 60px;">
 		<div class="col">
-		<div class="card">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">商品：{{ selectItem.name }}</p>
-				<p class="card-text">價錢：{{ selectItem.price }}</p>
-				<p v-show="isStatus" class="card-text">卡號末四碼：{{ cardSelected }}</p>
-				<p class="card-text">刷卡時間：{{ selectItem.datetime }}</p>
-				<div class="row" style="margin-bottom: 20px;">
-					<div class="col-8">
-						<p class="card-text">信用卡名稱：{{ cardName }}</p>
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<p class="card-text">商品：{{ selectItem.name }}</p>
+					<p class="card-text">價錢：{{ selectItem.price }}</p>
+					<p v-show="isStatus" class="card-text">卡號末四碼：{{ cardSelected }}</p>
+					<p class="card-text">刷卡時間：{{ selectItem.datetime }}</p>
+					<div class="row" style="margin-bottom: 20px;">
+						<div class="col-8">
+							<p class="card-text">信用卡名稱：{{ cardName }}</p>
+						</div>
+						<div class="col-2">
+							<input type="button" :class="btnEdit"
+								:value="editText" @click="changeCard()"/>
+						</div>
 					</div>
-					<div class="col-2">
-						<input type="button" :class="btnEdit"
-							:value="editText" v-on:click="changeCard()"/>
-					</div>
+					<card-select :is-show="isShow" :card-data="cardData" :card-index="index"
+						:card-selected="cardSelected" @save-card="saveCard"></card-select>
+					<input type="button" :class="isStatus ? btnDanger : btnSuccess"
+						:disabled="isDisabled" :value="isStatus ? dangerText : successText"
+						@click="changeStatus(selectItem.status)"/>
 				</div>
-				<cardSelect :is-show="isShow" :card-data="cardData" :card-index="index"
-					:card-selected="cardSelected" v-on:save-card="saveCard"></cardSelect>
-				<input type="button" :class="isStatus ? btnDanger : btnSuccess"
-					:disabled="isDisabled" :value="isStatus ? dangerText : successText"
-					v-on:click="changeStatus(selectItem.status)"/>
 			</div>
-		</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import cardSelect from "./cardSelect.vue"
-import _ from "lodash"
+import CardSelect from "./CardSelect.vue"
 
 export default {
+	components: {
+		"card-select": CardSelect
+	},
 	props: {
 		item: {
 			type:Object
 		},
+
 		cardData: {
 			type:Array
 		},
+
 		index: {
 			type:Number
 		},
-	},
-	components: {
-		"cardSelect": cardSelect
 	},
 	data() {
 		return {
@@ -69,6 +70,7 @@ export default {
 			this.isDisabled = false
 			return item
 		},
+
 		cardName() {
 			const itemData = this.itemData
 			const item = this.item
@@ -82,6 +84,7 @@ export default {
 
 			return name
 		},
+		
 		cardSelected() {
 			const itemData = this.itemData
 			const item = this.item

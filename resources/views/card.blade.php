@@ -92,9 +92,9 @@
                     </div>
                 </div>
             </div>
-            <card v-for="(item, index) in items" v-bind:item="item" v-bind:index="index" v-bind:key="item.id"
-                :card-data="cardItems" v-on:save-new-card="saveCardData"></card>
-            <message v-if="showErrorMessage" @close="showErrorMessage = false" :message="errorMessageText"></message>
+            <card-list v-for="(item, index) in items" :item="item" :index="index" :key="item.id"
+                :card-data="cardItems" @save-new-card="saveCardData"></card-list>
+            <card-message v-if="showErrorMessage" @close="showErrorMessage = false" :message="errorMessageText"></card-message>
         </div>
     </div>
     <script src="{{mix('js/app.js')}}"></script>

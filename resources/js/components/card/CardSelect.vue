@@ -28,33 +28,34 @@
                 </div>
             </div>
         </div>
-        <addCard v-if="showModal" @close="showModal = false" :card-number="cardNumber" v-on:send-card="sendCard"></addCard>
+        <card-add-data v-if="showModal" @close="showModal = false" @send-card="sendCard"></card-add-data>
     </form>
 </template>
 
 <script>
-import addCard from "./addCard.vue"
-import message from "./message.vue"
+import CardAddData from "./CardAddData.vue"
 import swal from "sweetalert"
 
 export default {
+    components:{
+        'card-add-data' : CardAddData
+    },
     props:{
         cardData:{
             type:Array
         },
+
         cardIndex:{
             type:Number
         },
+
         cardSelected:{
             type:String
         },
+
         isShow:{
             type:Boolean
         }
-    },
-    components:{
-        'addCard' : addCard,
-        'message': message
     },
     data:function(){
         return {
@@ -65,7 +66,6 @@ export default {
              'btnSuccess' : 'btn btn-success',
              'btnDanger' : 'btn btn-danger',
              'showModal': false,
-             //有更好的寫法，為什麼要再多一個變數?直接emit出去就好啦
              'showCardList' : this.isShow,
              'isError' : false,
              'isRepeat' : false
@@ -83,6 +83,7 @@ export default {
 
             return cardArray
         },
+        
         cardIndexData(){
             let cardIdArray = []
             let cardName = 'cardname' + this.cardIndex + "_"
@@ -93,16 +94,30 @@ export default {
                 cardIdArray.push(id)
             }
             return  cardIdArray
+        }
+    },
+    watch:{
+        selected(newVal, oldVal){
+            let obj = 'add'
+            let cardData = this.cardData
+             _.forEach(cardData, function (value, key) {
+                _.mapKeys(value, function(card, cardkey){
+                    let cardLast = value[cardkey].last
+
+                    if(newVal == cardLast){
+                        obj = value
+                        return
+                    }
+                })
+            })
+            
+            this.selectedData = obj
         },
-        cardNumber(){
-            //查一下為什麼cardList.vue無法用lodash
-            let num = []
-            // this.cardData.forEach(function(el){
-            //     console.log(el)
-            // })
-            // _.forEach(this.cardData, function (value, key) {
-            //     console.log(value)
-            // })
+        isShow(newVal, oldVal){
+            if(newVal == true){
+                this.selected = this.cardSelected
+            }
+            this.showCardList = newVal
         }
     },
     methods: {
@@ -157,29 +172,5 @@ export default {
             }
         }
     },
-    watch:{
-        selected(newVal, oldVal){
-            let obj = 'add'
-            let cardData = this.cardData
-             _.forEach(cardData, function (value, key) {
-                _.mapKeys(value, function(card, cardkey){
-                    let cardLast = value[cardkey].last
-
-                    if(newVal == cardLast){
-                        obj = value
-                        return
-                    }
-                })
-            })
-            
-            this.selectedData = obj
-        },
-        isShow(newVal, oldVal){
-            if(newVal == true){
-                this.selected = this.cardSelected
-            }
-            this.showCardList = newVal
-        }
-    }
 }
 </script>>

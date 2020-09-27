@@ -1,9 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import cityCounties from './components/CityCounties.vue';
-import cityDistricts from './components/CityDistricts.vue';
+import CityCounties from './components/city/CityCounties.vue';
+import CityDistricts from './components/city/CityDistricts.vue';
 
 let app = new Vue({
     el: '#app',
+    components: {
+        'city-counties': CityCounties,
+        'city-districts': CityDistricts
+    },
     data: {
         message: 'Vue練習:',
         showText: '顯示郵遞區號!',
@@ -13,10 +17,6 @@ let app = new Vue({
         districtsSelectedText: '',
         btnStyle: 'btn btn-primary'
     },
-    components: {
-        'city-counties': cityCounties,
-        'city-districts': cityDistricts
-    },
     methods: {
         getDistrictsData(DistrictsSelectedText, DistrictsSelected) {
             this.districtsSelectedText = DistrictsSelectedText
@@ -25,14 +25,14 @@ let app = new Vue({
         updateDistricts(CountiesSelectedText, CountiesSelected) {
             this.countiesSelectedText = CountiesSelectedText
             this.countiesSelected = CountiesSelected
-            this.districtsSelected = 0
+            this.districtsSelected = NaN
         },
         showPostalCode() {
-            let show_text = ''
-            if (this.countiesSelected != 0 && this.districtsSelected != 0) {
-                show_text = this.countiesSelectedText + " " + this.districtsSelectedText + " 郵遞區號為：" + this.districtsSelected
-                alert(show_text)
+            let show_text = '請選擇縣市和市區'
+            if (!isNaN(this.countiesSelected) && !isNaN(this.districtsSelected)) {
+                show_text = this.countiesSelectedText + " " + this.districtsSelectedText + " 郵遞區號為：" + this.districtsSelected 
             }
+            alert(show_text)
         }
     }
 })
