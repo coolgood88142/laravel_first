@@ -3,5 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/js/card.js": "/js/card.js",
     "/js/city.js": "/js/city.js",
+    "/js/hello.js": "/js/hello.js",
+    "/js/route.js": "/js/route.js",
     "/js/search.js": "/js/search.js"
 }

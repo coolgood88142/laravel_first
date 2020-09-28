@@ -81,35 +81,30 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/hello.js":
+/***/ "./resources/js/rotue.js":
 /*!*******************************!*\
-  !*** ./resources/js/hello.js ***!
+  !*** ./resources/js/rotue.js ***!
   \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    message: 'Hello World!'
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\xampp\\htdocs\\laravel_first\\resources\\js\\rotue.js'");
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!*************************************!*\
-  !*** multi ./resources/js/hello.js ***!
+  !*** multi ./resources/js/rotue.js ***!
   \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\laravel_first\resources\js\hello.js */"./resources/js/hello.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\laravel_first\resources\js\rotue.js */"./resources/js/rotue.js");
 
 
 /***/ })
