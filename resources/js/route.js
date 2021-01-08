@@ -1,5 +1,5 @@
-import VueRouter from 'vue-router';
-Vue.use(VueRouter)
+// import VueRouter from 'vue-router';
+// Vue.use(VueRouter)
 
 const test = { template: '<div>Show Test</div>' }
 const bread1 = { template: '<div>Show bread1</div>' }
